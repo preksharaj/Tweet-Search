@@ -1,0 +1,117 @@
+<html>
+  <head>
+      
+    <style>
+        body{
+            font-family: "Times New Roman", Times, serif;
+            
+        }
+        h1{
+            color:#00ACED;
+            font-size: 40px;
+        }
+        #maindiv {
+            position: fixed;
+            top: 10%;
+            left: 20%;
+            right:20%;
+            margin-top: -10px;
+            margin-left: -50px;
+        }
+        #search, #submit, #result-list{
+            font-size:25px;
+        }
+        
+      /* unvisited link */
+      a:link {
+          color: blue;
+      }
+
+      /* visited link */
+      a:visited {
+          color: #00ACED;
+      }
+
+      /* mouse over link */
+      a:hover {
+          color: hotpink;
+      }
+
+      /* selected link */
+      a:active {
+          color: red;
+      }
+    </style>
+    <title>Simple Tweet Search App</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">  </script>
+    <script>
+        var term,pass,hash;
+        function submitFunction(){
+          term=$("#search").val();
+          searchFunction(term);
+        }
+
+        function searchFunction(term){
+            //user=$("#user").val();
+            $('#result-list').empty();
+            $.post("http://localhost:3000/login",{term: term}, function(data){
+                res=data;
+                res =res.sort(function(a,b){
+                if(a['tweet'].indexOf(/@/) > -1){
+                return a<b;
+                }
+                else{return a>b;
+                }
+                });
+                for(i in res){
+                    var anchor,hash;
+                    console.log(res[i]['tweet']);
+                    var words = res[i]['tweet'].split(' ');
+                    for (var j in words) {
+                        if (words[j].indexOf('http://') == 0) {
+                            anchor='<a href="'+words[j]+'" target="_blank">'+words[j]+'</a>';
+                            words[j]=anchor;
+                            //words.splice(j, 1);
+                        }
+                        if(words[j].search(/#|@/)== 0){
+                            hash = '<a href="#result-list" onClick='+'linkmap("'+words[j]+'");'+'><u><b>'+words[j]+'</b></u></a>';
+                            words[j]=hash;
+                        }
+                    }
+
+                    words=words.join(' ');
+                    console.log(words);
+                    //             $('<a />', {
+                    //     href: anchor,
+                    //     text: anchor
+                    // }).wrap('<li> '+ words+' <li/>').parent().appendTo('#result-list');
+                                
+                    $("#result-list").append($("<li>").html(res[i]['id']+" : "+words));
+                }
+              
+                console.log(data);
+            });
+        }
+       
+              function linkmap(str){ 
+                 $('#search').val(str);
+                 searchFunction(str);
+                };
+      
+    </script>
+  </head>
+  <body>
+      <div id="maindiv">
+    <h1>Tweet Search!</h1>
+    <form action="/login" method="POST">
+    <input type="TEXT" id="search" size="40"><br>
+    <input type="button" id="submit" value="Submit" onClick="submitFunction();">
+    </form>
+    <div id="result">
+    <ul id="result-list">
+    </ul>
+    </div>
+          </div>
+  </body>
+</html>
+
