@@ -1,0 +1,39 @@
+ body{
+            font-family: "Times New Roman", Times, serif;
+            
+        }
+        h1{
+            color:#00ACED;
+            font-size: 40px;
+        }
+        #maindiv {
+            position: fixed;
+            top: 10%;
+            left: 20%;
+            right:20%;
+            margin-top: -10px;
+            margin-left: -50px;
+        }
+        #search, #submit, #result-list{
+            font-size:25px;
+        }
+        
+      /* unvisited link */
+      a:link {
+          color: blue;
+      }
+
+      /* visited link */
+      a:visited {
+          color: #00ACED;
+      }
+
+      /* mouse over link */
+      a:hover {
+          color: hotpink;
+      }
+
+      /* selected link */
+      a:active {
+          color: red;
+      }

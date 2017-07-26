@@ -4,11 +4,13 @@ var app            =         express();
 var fs             =		 require("fs");
 var readline       =         require("readline");
 var stream         =         require("stream");
+var path = require('path');
+app.use('/css',express.static(path.join(__dirname, 'public/css')));
 list=[];
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/static', express.static(__dirname + '/static'));
+
 
 
 var instream = fs.createReadStream('read.txt');
@@ -28,7 +30,7 @@ rl.on('line', function(line) {
     line=line.slice(20);
     line=line.slice(0,141);
     line=line.trim();
-    list.push({'id':"nytimes "+ id,'tweet':line});
+    list.push({'id':"nytimes "+ id,'tweet':line, 'w':0});
     console.log(list);
     });
 
@@ -45,7 +47,25 @@ app.post('/login',function(req,res){
   	var x=list[i]['tweet'].toLowerCase();
   	var y=req.body.term.toLowerCase();
     if (x.indexOf(y) > -1) {
-    	result.push(list[i]);}}
+    	result.push(list[i]);
+    }
+  }
+
+for(var j in result){
+    //var term = result[j];
+    console.log(result[j]['tweet']);
+    //if ((result[j]['tweet'].indexof('#'))>-1){
+      // console.log(result[j]['w']);
+    //}
+    
+}
+//    result =result.sort(function(a,b){
+//                if(a['tweet'].indexOf(/#/) > -1){
+//                return a['w']+=3;
+//                }
+//                else{return b['w']+=3;
+//                }
+//                });
    
     
   console.log("term name = "+result);
